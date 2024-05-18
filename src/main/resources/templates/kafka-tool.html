@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Kafka Viewer Tools</title>
+
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.3/themes/hot-sneaks/jquery-ui.css" />
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+        <script>
+
+            function populateTable(data) {
+                const messageList = document.getElementById("messageList");
+                data.forEach(item => {
+
+                    const row1 = document.createElement("tr");
+                    row1.classList.add('collapsible');
+                    row1.innerHTML = `
+                        <td>${item.message}</td>
+                    `;
+
+                    const row2 = document.createElement("tr");
+                    row2.classList.add('content');
+                    row2.innerHTML = `
+                        <td><pre>${item.message}</pre></td>
+                    `;
+
+<!--                    const cell2 = document.createElement('td');-->
+<!--                    cell2.colSpan = 2;-->
+<!--                    cell2.innerHTML = `<pre>${item.message}</pre>`;-->
+<!--                    row2.appendChild(cell2);-->
+
+                    messageList.appendChild(row1);
+                    messageList.appendChild(row2);
+                });
+
+                toggle();
+            }
+
+            function readMode() {
+
+            }
+
+            function kafkaUtility() {
+                $.ajax({
+                    type: "GET",
+                    url: "/lastMessages",
+                    success: function(responseData){
+                        populateTable(responseData);
+                    },
+                    error: function(xhr, status, error){
+                        alert(error.message);
+                        console.log(error);
+                    },
+                    async: true
+                });
+            }
+
+            function toggle() {
+                var coll = document.getElementsByClassName("collapsible");
+                for (var i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                        this.classList.toggle("active");
+                        var content = this.nextElementSibling;
+                        if (content.style.display === "block") {
+                            content.style.display = "none";
+                        } else {
+                            content.style.display = "block";
+                        }
+                    });
+                }
+            }
+
+
+            $(document).ready(function() {
+                $('#kafka_btn').on('click', function() {
+                    kafkaUtility();
+                });
+            });
+        </script>
+
+        <style>
+            table, tr, th {
+                border: 1px solid black;
+                width: 100%;
+            }
+
+
+            .collapsible {
+                background-color: #eee;
+                color: #444;
+                cursor: pointer;
+                padding: 18px;
+                width: 100%;
+                border: 1px solid #000;
+                text-align: left;
+                font-size: 15px;
+                outline: #000;
+
+<!--                white-space: nowrap;-->
+<!--                width: 80px;-->
+<!--                overflow: hidden;-->
+<!--                text-overflow: ellipsis;-->
+<!--                border: 1px solid #000000;-->
+            }
+
+            .active, .collapsible:hover {
+                background-color: #ccc;
+                border: 1px solid #000;
+            }
+
+            .content {
+                color: #0000ff;
+                display: none;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Kafka Viewer Tool</h1>
+        <input type="button" id="kafka_btn" value="submit">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Payload</th>
+                </tr>
+            </thead>
+            <tbody id="messageList">
+
+            </tbody>
+        </table>
+    </body>
+</html>

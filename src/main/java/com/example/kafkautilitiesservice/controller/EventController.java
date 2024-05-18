@@ -47,7 +47,7 @@ public class EventController {
         try {
             int count = 100;
             for (int i = 0; i < count; i++) {
-                publisher.sendMessageToTopic(message + " - " + i);
+                publisher.sendMessageToTopic(message + " - jdskfdllklfskdkjfjdlkf lkjsjdkfjklskfkljklsdfk ljlksjkldjfkklsdklfjkjslkdfjl lkjksljdkfjkjslkdflkjdslkkfj ljkjdlkfklsjdlflkjsldjfklsj ljklsjdklfjjsdlk f" + i);
             }
 
         } catch (Exception e) {
@@ -155,8 +155,8 @@ public class EventController {
             for (ConsumerRecord<String, Object> record : records) {
                 System.out.println("Sent message=[" + record.value() + "] with offset=[" + record.offset() + "]");
                 Map<String, Object> map = new HashMap<>();
-                map.put("Message", record.value());
-                map.put("Offset", record.offset());
+                map.put("message", record.value());
+                map.put("offset", record.offset());
                 messages.add(map);
             }
         } catch (Exception e) {
